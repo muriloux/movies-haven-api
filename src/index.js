@@ -6,7 +6,7 @@ const connectDB = require("./db/db");
 const app = express();
 
 connectDB();
-routes(app);
+app.use(routes)
 
 app.listen(port, () => {
   console.log("Server running on " + port);

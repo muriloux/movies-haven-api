@@ -1,9 +1,12 @@
+const express = require('express');
 const path = require("path");
+const router = express.Router();
 
-function htmlRoutes(app) {
-  app.get("/", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "..", "..", "views/index.html"));
-  });
-}
+// Define HTML routes
+router.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, "..", "views/index.html"))
+});
 
-module.exports = htmlRoutes;
+// Add more HTML routes as needed
+
+module.exports = router;
