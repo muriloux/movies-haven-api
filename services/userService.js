@@ -1,28 +1,29 @@
-const User = require("../models/user"); // Adjust the path based on your project structure
-const { userJoiSchema } = require("../models/user");
+const User = require('../models/user');
+const JwtService = require('./jwtService');
 
 class UserService {
-  static async registerUser(username, email, password) {
+  static async registerUser(username, email, ip) {
     try {
-      const { error } = userJoiSchema.validate({
-        username,
-        email,
-      });
 
-      if (error) {
-        throw new Error(error.details[0].message);
+      const userExists = await User.findOne({ email });
+      if (userExists) {
+        return { success: false, message: 'Email is already registered' };
       }
 
       const newUser = new User({
         username,
         email,
+        ip
       });
 
       await newUser.save();
-      return { success: true, message: "User registered successfully" };
+
+      const token = JwtService.generateToken(newUser);
+
+      return { success: true, message: 'User registered successfully', token };
     } catch (error) {
-      console.error("Error registering user:", error.message);
-      return { success: false, message: "Registration failed" };
+      console.error('Error registering user:', error);
+      return { success: false, message: 'Registration failed' };
     }
   }
 }

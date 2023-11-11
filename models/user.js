@@ -4,7 +4,7 @@ const Joi = require("joi");
 const userSchema = new mongoose.Schema({
   username: String,
   email: String,
-  password: String, // hash and salt the password for security
+  ip: String,
   createdAt: {
     type: Date,
     default: Date.now,
@@ -14,13 +14,10 @@ const userSchema = new mongoose.Schema({
 const userJoiSchema = {
   username: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().required(),
+  ip: Joi.string().required(),
   createdAt: Joi.date(),
 };
 
 const User = mongoose.model("User", userSchema, "User");
 
-module.exports = {
-  User,
-  userJoiSchema,
-};
+module.exports = User;
