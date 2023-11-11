@@ -9,7 +9,7 @@ const connectDB = require("./db/db");
 const app = express();
 
 connectDB();
-app.use(bodyparser.json())
+app.use(bodyparser.json());
 app.use(routes);
 
 app.listen(port, () => {
