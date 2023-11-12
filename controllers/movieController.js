@@ -15,12 +15,6 @@ class MovieController {
     try {
       const { title, curatorName } = req.body;
 
-      if(!title || !curatorName){
-        return res
-          .status(400)
-          .json({ error: "Please provide 'title' and 'curatorName' fields." });
-      }
-
       const postMovieResponse = await MovieService.postMovie(
         title,
         curatorName
