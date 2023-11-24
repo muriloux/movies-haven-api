@@ -2,9 +2,29 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const userSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  ip: String,
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  hashedPassword: {
+    type: String,
+    required: true,
+  },
+  roles: {
+    type: [String],
+    default: ["user"],
+  },
+  ip: {
+    type: String,
+    required: true,
+    default: null,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
