@@ -6,7 +6,7 @@ const isAdminMiddleware = (req, res, next) => {
       .status(401)
       .json({ error: "Unauthorized: User not authenticated" });
   }
-  console.log(user);
+
   if (user.roles && user.roles.includes("admin")) {
     next();
   } else {
