@@ -5,10 +5,15 @@ const bcrypt = require("bcrypt");
 class UserService {
   static async registerUser(userData, ip) {
     try {
-      const userExists = await User.findOne({ email: userData.email });
-      if (userExists) {
+      const emailExists = await User.findOne({ email: userData.email });
+      const userExists = await User.findOne({ username: userData.username });
+      if (emailExists) {
         return { success: false, message: "Email is already registered" };
       }
+      if (userExists) {
+        return { success: false, message: "Username is already taken" };
+      }
+
 
       const hashedPassword = await bcrypt.hash(userData.password, 10);
 
