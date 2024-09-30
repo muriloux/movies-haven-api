@@ -34,6 +34,55 @@ class MovieController {
     }
   }
 
+  static async postMoviesBulk(req, res) {
+    try {
+      const { curatorName } = req.query;
+      const movieTitles = req.body;
+
+      if (!Array.isArray(movieTitles) || movieTitles.length === 0) {
+        return res
+          .status(400)
+          .json({ error: "Please provide an array of movie titles." });
+      }
+
+      if (!curatorName) {
+        return res
+          .status(400)
+          .json({ error: "curatorName query parameter is required." });
+      }
+
+      const sanitizeMovieTitles = (titles) => {
+        return titles.map((title) => {
+          return title.replace(/[^\x20-\x7E]+/g, "");
+        });
+      };
+
+      const sanitizedMovies = sanitizeMovieTitles(movieTitles);
+
+      const moviesWithCurator = sanitizedMovies.map((title) => ({
+        title,
+        curatorName,
+      }));
+
+      const postMoviesResponse = await MovieService.postMoviesBulk(
+        moviesWithCurator
+      );
+
+      if (postMoviesResponse.success) {
+        res.status(201).json({
+          message: postMoviesResponse.message,
+          insertedMovies: postMoviesResponse.insertedMovies,
+          existingMovies: postMoviesResponse.existingTitles,
+        });
+      } else {
+        res.status(400).json({ error: postMoviesResponse.message });
+      }
+    } catch (error) {
+      console.error("Error posting movies in bulk:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+
   static async searchMovie(req, res) {
     try {
       const { title } = req.query;
