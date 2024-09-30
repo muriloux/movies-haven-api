@@ -7,17 +7,20 @@ const authenticateToken = require("../middlewares/authenticateToken");
 const validateUserData = require("../middlewares/validateUserData");
 const isAdmin = require("../middlewares/isAdmin");
 
+const adminRoute = process.env.ADMIN_ROUTE || "/admin";
+const postMoviesRoute = process.env.POST_MOVIES_ROUTE || "/movies";
+
 router.get("/", (req, res) => {
   res.send({ message: "This is an API." });
 });
 
-router.get("/admin", authenticateToken, isAdmin, (req, res) => {
+router.get(adminRoute, authenticateToken, isAdmin, (req, res) => {
   res.send({ message: "You are an admin." });
 });
 
 router.get("/movies", authenticateToken, MovieController.getMovies);
 router.post(
-  "/movies",
+  postMoviesRoute,
   authenticateToken,
   isAdmin,
   validateMovieData,
