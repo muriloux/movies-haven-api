@@ -85,14 +85,17 @@ class MovieController {
 
   static async searchMovie(req, res) {
     try {
-      const { title } = req.query;
+      const { title, curator } = req.query;
 
-      if (!title) {
+      if (!title && !curator) {
         return res
           .status(400)
-          .json({ error: "Please provide a title for the search." });
+          .json({ error: "Please provide a field for the search." });
       }
-      const searchMovieResponse = await MovieService.searchMovie(title);
+      const searchMovieResponse = await MovieService.searchMovie(
+        title,
+        curator
+      );
 
       if (searchMovieResponse.success) {
         res.status(200).json({

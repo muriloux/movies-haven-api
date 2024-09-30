@@ -70,9 +70,14 @@ class MovieService {
     }
   }
 
-  static async searchMovie(title) {
+  static async searchMovie(title, curatorName) {
+    const searchCriteria = {};
+
+    if (title) searchCriteria.title = new RegExp(title, "i");
+    if (curatorName) searchCriteria.curatorName = new RegExp(curatorName, "i");
+
     try {
-      const movies = await Movie.find({ title: new RegExp(title, "i") });
+      const movies = await Movie.find(searchCriteria);
       if (!movies) {
         return { success: false, message: "No movies found." };
       } else {
